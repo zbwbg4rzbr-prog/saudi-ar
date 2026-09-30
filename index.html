@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>بوابة السعودية بالواقع المعزز</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif;
+      background: #07130d;
+      color: white;
+      min-height: 100vh;
+    }
+
+    .app {
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(25, 120, 70, 0.35), transparent 35%),
+        linear-gradient(180deg, #0b2115, #06100a);
+    }
+
+    header {
+      padding: 28px 20px 18px;
+      text-align: center;
+      position: relative;
+      z-index: 5;
+    }
+
+    header h1 {
+      font-size: 25px;
+      line-height: 1.5;
+      text-shadow: 0 2px 10px black;
+    }
+
+    header p {
+      margin-top: 5px;
+      color: #c8d8ce;
+      font-size: 14px;
+    }
+
+    .viewer {
+      position: relative;
+      margin: 10px 14px;
+      height: 55vh;
+      min-height: 390px;
+      border: 2px solid rgba(255,255,255,.75);
+      border-radius: 25px;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(0,0,0,.18), rgba(0,0,0,.4)),
+        linear-gradient(135deg, #65806e, #182a20);
+      box-shadow: 0 15px 50px rgba(0,0,0,.5);
+    }
+
+    /* إطار الواقع المعزز */
+    .corner {
+      position: absolute;
+      width: 45px;
+      height: 45px;
+      border-color: white;
+      z-index: 4;
+    }
+
+    .tl {
+      top: 25px;
+      left: 25px;
+      border-top: 5px solid;
+      border-left: 5px solid;
+    }
+
+    .tr {
+      top: 25px;
+      right: 25px;
+      border-top: 5px solid;
+      border-right: 5px solid;
+    }
+
+    .bl {
+      bottom: 25px;
+      left: 25px;
+      border-bottom: 5px solid;
+      border-left: 5px solid;
+    }
+
+    .br {
+      bottom: 25px;
+      right: 25px;
+      border-bottom: 5px solid;
+      border-right: 5px solid;
+    }
+
+    .scan-line {
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      top: 50%;
+      height: 2px;
+      background: rgba(255,255,255,.8);
+      box-shadow: 0 0 12px rgba(255,255,255,.7);
+      z-index: 3;
+    }
+
+    .landmark {
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      transform: translate(-50%, -50%);
+      width: 82%;
+      text-align: center;
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(0,0,0,.58);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.25);
+      z-index: 2;
+      animation: appear .5s ease;
+    }
+
+    .landmark .icon {
+      font-size: 70px;
+      margin-bottom: 8px;
+    }
+
+    .landmark h2 {
+      font-size: 27px;
+      margin-bottom: 8px;
+    }
+
+    .landmark p {
+      color: #e0e9e3;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      padding: 18px 14px 10px;
+      overflow-x: auto;
+    }
+
+    .controls button {
+      flex: 1;
+      min-width: 115px;
+      border: 0;
+      border-radius: 15px;
+      padding: 13px 8px;
+      background: #123b25;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      border: 1px solid #34704b;
+      cursor: pointer;
+    }
+
+    .controls button.active {
+      background: #1d8a50;
+      border-color: #65d99a;
+    }
+
+    .info {
+      margin: 15px 14px 25px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      text-align: center;
+      line-height: 1.8;
+      color: #dce9e1;
+    }
+
+    .start {
+      display: block;
+      margin: 5px auto 20px;
+      border: none;
+      border-radius: 18px;
+      padding: 15px 35px;
+      background: #20a35c;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      box-shadow: 0 8px 25px rgba(32,163,92,.3);
+      cursor: pointer;
+    }
+
+    .start:active,
+    .controls button:active {
+      transform: scale(.97);
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      color: #8da99a;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header>
+    <h1>🇸🇦 بوابة السعودية بالواقع المعزز</h1>
+    <p>اكتشفي أبرز معالم المملكة</p>
+  </header>
+
+  <main>
+
+    <div class="viewer">
+
+      <div class="corner tl"></div>
+      <div class="corner tr"></div>
+      <div class="corner bl"></div>
+      <div class="corner br"></div>
+
+      <div class="scan-line"></div>
+
+      <div class="landmark" id="landmark">
+        <div class="icon">🏙️</div>
+        <h2>برج المملكة</h2>
+        <p>
+          أحد أشهر معالم مدينة الرياض،
+          ويتميز بتصميمه المميز وإطلالته على المدينة.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="controls">
+
+      <button class="active" onclick="showLandmark(0, this)">
+        🏙️ الرياض
+      </button>
+
+      <button onclick="showLandmark(1, this)">
+        🏔️ العلا
+      </button>
+
+      <button onclick="showLandmark(2, this)">
+        🏛️ الدرعية
+      </button>
+
+      <button onclick="showLandmark(3, this)">
+        🌊 جدة
+      </button>
+
+    </div>
+
+    <div class="info">
+      <strong>📍 استكشفي السعودية</strong>
+      <br>
+      اختاري أحد المعالم من الأسفل لعرض معلوماته.
+    </div>
+
+    <button class="start" onclick="startExperience()">
+      ✨ ابدأ التجربة
+    </button>
+
+  </main>
+
+  <footer>
+    صنع بحب للمملكة العربية السعودية 🇸🇦
+  </footer>
+
+</div>
+
+
+<script>
+
+  const landmarks = [
+
+    {
+      icon: "🏙️",
+      title: "برج المملكة",
+      text: "أحد أشهر معالم الرياض، ويتميز بتصميمه المعماري الفريد وإطلالته المميزة على المدينة."
+    },
+
+    {
+      icon: "🏔️",
+      title: "العلا",
+      text: "وجهة تاريخية وسياحية مميزة في شمال غرب المملكة، وتشتهر بتكويناتها الصخرية وآثارها التاريخية."
+    },
+
+    {
+      icon: "🏛️",
+      title: "الدرعية",
+      text: "من أبرز المواقع التاريخية في المملكة، وتشتهر بحي الطريف ومبانيها الطينية وتراثها العريق."
+    },
+
+    {
+      icon: "🌊",
+      title: "واجهة جدة",
+      text: "من أبرز الوجهات البحرية في مدينة جدة، وتتميز بإطلالتها على البحر الأحمر ومرافقها الترفيهية."
+    }
+
+  ];
+
+
+  function showLandmark(index, button) {
+
+    const landmark = landmarks[index];
+
+    document.getElementById("landmark").innerHTML = `
+      <div class="icon">${landmark.icon}</div>
+      <h2>${landmark.title}</h2>
+      <p>${landmark.text}</p>
+    `;
+
+    document.querySelectorAll(".controls button")
+      .forEach(btn => btn.classList.remove("active"));
+
+    button.classList.add("active");
+  }
+
+
+  function startExperience() {
+
+    const viewer = document.querySelector(".viewer");
+
+    viewer.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+
+    const landmark = document.getElementById("landmark");
+
+    landmark.style.animation = "none";
+
+    setTimeout(() => {
+      landmark.style.animation = "appear .5s ease";
+    }, 20);
+
+  }
+
+</script>
+
+</body>
+</html>
